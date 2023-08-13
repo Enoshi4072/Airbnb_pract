@@ -1,0 +1,78 @@
+#!/usr/bin/python3
+
+import unittest
+import models
+from datetime import datetime
+from models.base_model import BaseModel
+from models.city import City
+from datetime import time
+import os
+
+
+class TestCity(unittest.TestCase):
+    """Test cases for the City class."""
+
+    def test_city_inherits_base_model(self):
+        """Test if City inherits from BaseModel."""
+        city = City()
+        self.assertIsInstance(city, BaseModel)
+
+    def test_city_has_state_id_attribute(self):
+        """Test if City class has the 'state_id' attribute."""
+        self.assertTrue(hasattr(City, 'state_id'))
+
+    def test_city_has_name_attribute(self):
+        """Test if City class has the 'name' attribute."""
+        self.assertTrue(hasattr(City, 'name'))
+
+    def test_state_id_defaults_to_empty_string(self):
+        """Test the default value of the 'state_id' attribute."""
+        city = City()
+        self.assertEqual(city.state_id, "")
+
+    def test_name_defaults_to_empty_string(self):
+        """Test the default value of the 'name' attribute."""
+        city = City()
+        self.assertEqual(city.name, "")
+
+    def test_assign_values_to_attributes(self):
+        """Test assignment of values to attributes."""
+        city = City(state_id="123", name="Los Angeles")
+        self.assertEqual(city.state_id, "123")
+        self.assertEqual(city.name, "Los Angeles")
+
+    def test_city_to_dict_method(self):
+        """Test the to_dict method of the City class."""
+        city = City(state_id="456", name="San Francisco")
+        city_dict = city.to_dict()
+        expected_keys = [
+                'id', 'created_at', 'updated_at',
+                'state_id', 'name', '__class__'
+        ]
+
+        self.assertTrue(all(key in city_dict for key in expected_keys))
+
+    def test_city_str_representation(self):
+        """Test the __str__ method of the City class."""
+        city = City(state_id="789", name="Seattle")
+        expected_str = "[City] ({}) {}".format(city.id, city.__dict__)
+        self.assertEqual(str(city), expected_str)
+
+    def test_city_created_at_is_datetime(self):
+        """Test if 'created_at' attribute is of type datetime."""
+        city = City()
+        self.assertIsInstance(city.created_at, datetime)
+
+    def test_city_updated_at_is_datetime(self):
+        """Test if 'updated_at' attribute is of type datetime."""
+        city = City()
+        self.assertIsInstance(city.updated_at, datetime)
+
+    def test_city_id_is_str(self):
+        """Test if 'id' attribute is of type string."""
+        city = City()
+        self.assertEqual(str, type(city.id))
+
+
+if __name__ == '__main__':
+    unittest.main()

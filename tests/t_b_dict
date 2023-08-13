@@ -1,0 +1,57 @@
+#!/usr/bin/python3
+
+import unittest
+from models.base_model import BaseModel
+from datetime import datetime
+import os
+import models
+from time import sleep
+
+
+class TestBaseModelToDictMethod(unittest.TestCase):
+    def setUp(self):
+        self.base_model = BaseModel()
+
+    def test_to_dict_return_type(self):
+        dict_data = self.base_model.to_dict()
+        self.assertIsInstance(dict_data, dict)
+
+    def test_to_dict_has_class_key(self):
+        dict_data = self.base_model.to_dict()
+        self.assertIn('__class__', dict_data)
+
+    def test_to_dict_class_key_value(self):
+        dict_data = self.base_model.to_dict()
+        self.assertEqual(dict_data['__class__'], 'BaseModel')
+
+    def test_to_dict_contains_created_at(self):
+        dict_data = self.base_model.to_dict()
+        self.assertIn('created_at', dict_data)
+
+    def test_to_dict_contains_updated_at(self):
+        dict_data = self.base_model.to_dict()
+        self.assertIn('updated_at', dict_data)
+
+    def test_to_dict_created_at_format(self):
+        dict_data = self.base_model.to_dict()
+        datetime_format = '%Y-%m-%dT%H:%M:%S.%f'
+        self.assertTrue(datetime.strptime(dict_data['created_at'], datetime_format))
+
+    def test_to_dict_updated_at_format(self):
+        dict_data = self.base_model.to_dict()
+        self.assertTrue(datetime.strptime(dict_data['updated_at'], '%Y-%m-%dT%H:%M:%S.%f'))
+
+    def test_to_dict_contains_id(self):
+        dict_data = self.base_model.to_dict()
+        self.assertIn('id', dict_data)
+
+    def test_to_dict_contains_additional_attrs(self):
+        self.base_model.name = "Test Name"
+        self.base_model.number = 42
+        dict_data = self.base_model.to_dict()
+        self.assertIn('name', dict_data)
+        self.assertIn('number', dict_data)
+
+if __name__ == '__main__':
+    unittest.main()
+
